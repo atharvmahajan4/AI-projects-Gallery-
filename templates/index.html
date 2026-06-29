@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ResumeGenius AI — Instant Resume Analysis</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="logo"><span class="logo-mark">RG</span>ResumeGenius AI</div>
+  <span class="badge">AI-Powered</span>
+</header>
+
+<section class="hero">
+  <div>
+    <span class="eyebrow">Resume Analysis Dashboard</span>
+    <h1>Know exactly why your resume gets skipped — before a recruiter does.</h1>
+    <p class="sub">Upload your resume and get an ATS score, a clear summary, your real strengths and gaps, the skills you're missing, and the interview questions it's likely to trigger — all in one dashboard.</p>
+    <button class="hero-cta" id="scrollToUpload">Analyze my resume →</button>
+  </div>
+  <div class="hero-visual">
+    <div class="gauge-demo" aria-hidden="true">
+      <svg viewBox="0 0 110 110">
+        <circle class="ring-bg" cx="55" cy="55" r="50"></circle>
+        <circle class="ring-fg" cx="55" cy="55" r="50"></circle>
+      </svg>
+      <div class="gauge-text">
+        <span class="gauge-num">88</span>
+        <span class="gauge-label">ATS Score</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="workspace" id="workspace">
+  <div class="panel-card">
+    <h2>Upload your resume</h2>
+    <p class="card-sub">PDF, DOCX, or just paste the text — whatever's fastest.</p>
+
+    <div class="dropzone" id="dropzone" tabindex="0" role="button" aria-label="Upload resume file">
+      <div class="dz-main">Drag a file here, or click to browse</div>
+      <div class="dz-sub">PDF or DOCX, up to 10 MB</div>
+      <input type="file" id="fileInput" accept=".pdf,.docx">
+    </div>
+    <div class="file-chip" id="fileChip">
+      <span id="fileChipName"></span>
+      <button id="removeFile" aria-label="Remove file">✕</button>
+    </div>
+
+    <textarea id="resumeText" placeholder="…or paste your resume text here. You can edit it after uploading a file, too."></textarea>
+
+    <div class="field-row">
+      <div class="field">
+        <label for="roleSelect">Target role (optional)</label>
+        <select id="roleSelect">
+          <option value="">No specific role</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="run-row">
+      <button class="btn-primary" id="analyzeBtn">Analyze resume</button>
+    </div>
+    <div class="loading-row" id="loadingRow">
+      <div class="loading-status"><span class="spinner"></span><span id="loadingText"></span></div>
+      <div class="progress-track"><div class="progress-fill"></div></div>
+    </div>
+    <div class="error-note" id="errorNote"></div>
+  </div>
+
+  <div class="panel-card" id="historyCard">
+    <h2 style="font-size:18px;">Past analyses</h2>
+    <p class="card-sub">Saved in this browser — click one to reopen it.</p>
+    <div class="history-list" id="historyList"></div>
+    <p class="history-empty" id="historyEmpty">No analyses yet.</p>
+  </div>
+</section>
+
+<section class="report" id="report" hidden>
+  <div class="dashboard-grid" style="margin-bottom:22px;">
+    <div class="panel-card score-card">
+      <div class="score-ring" id="atsRing"></div>
+      <div class="score-meta">
+        <div class="score-title">ATS Score</div>
+        <p>How well an Applicant Tracking System can parse, rank, and surface this resume.</p>
+      </div>
+    </div>
+    <div class="panel-card summary-card">
+      <div class="col-title neutral">Resume Summary</div>
+      <p id="summaryText"></p>
+    </div>
+  </div>
+
+  <div class="dashboard-grid">
+    <div class="panel-card">
+      <div class="col-title good">Strengths</div>
+      <ul class="mark-list good" id="strengthsList"></ul>
+    </div>
+    <div class="panel-card">
+      <div class="col-title bad">Weaknesses</div>
+      <ul class="mark-list bad" id="weaknessesList"></ul>
+    </div>
+
+    <div class="panel-card">
+      <div class="col-title bad">Missing Skills</div>
+      <div class="skill-chips" id="skillChips"></div>
+    </div>
+    <div class="panel-card">
+      <div class="col-title neutral">Improvement Suggestions</div>
+      <ol class="next-steps" id="stepsList" style="list-style:none; padding:0;"></ol>
+    </div>
+
+    <div class="panel-card span-2">
+      <div class="col-title neutral">Likely Interview Questions</div>
+      <ul class="qa-list" id="qaList"></ul>
+    </div>
+  </div>
+
+  <div class="report-actions">
+    <button class="btn-ghost" id="exportBtn">Export report (.txt)</button>
+    <button class="btn-ghost" id="newReviewBtn">Analyze another resume</button>
+  </div>
+</section>
+
+<footer class="site-footer">
+  Your resume is analyzed on demand and never stored on a server — past results live only in this browser.
+</footer>
+
+<script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
